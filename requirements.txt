@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+jinja2
+transformers
+huggingface-hub
+torch --index-url https://download.pytorch.org/whl/cpu

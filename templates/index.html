@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vietnamese QA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Vietnamese Extractive Question Answering</h1>
+        
+        <form id="qa-form">
+            <div class="form-group">
+                <textarea id="context" name="context" rows="8" placeholder="Enter your Vietnamese text here :3"></textarea>
+            </div>
+            <div class="form-group question-group">
+                <input type="text" id="question" name="question" placeholder="Enter your question here ;3">
+                <button type="submit" id="submit-btn">Get Answer</button>
+            </div>
+        </form>
+
+        <div id="result-container">
+            <p id="answer-label">Answer:</p>
+            <div id="answer-output"></div>
+        </div>
+
+        <footer>
+            Created by CS221.P21 2025 - Group ChatGPT
+        </footer>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
