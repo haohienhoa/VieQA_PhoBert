@@ -9,29 +9,23 @@ from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 from contextlib import asynccontextmanager
 from huggingface_hub import snapshot_download
 
-CACHE_DIR = "/var/data/hf-cache"
-MODEL_CACHE_PATH = os.path.join(CACHE_DIR, "phobert-vieqa-model")
-
 HF_MODEL_ID = os.getenv("HF_MODEL_ID", "haohahahihihehe/PhoBert_VieQA")
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 models = {}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global MODEL_CACHE_PATH
+    print(f"No persistent disk detected. Downloading model '{HF_MODEL_ID}' on every startup...")
     
-    if not os.path.exists(MODEL_CACHE_PATH):
-        print(f"Model not found in cache. Downloading model '{HF_MODEL_ID}' to '{MODEL_CACHE_PATH}'...")
-        os.makedirs(CACHE_DIR, exist_ok=True) 
-        snapshot_download(repo_id=HF_MODEL_ID, local_dir=MODEL_CACHE_PATH)
-        print("Model downloaded successfully.")
-    else:
-        print(f"Model found in cache at '{MODEL_CACHE_PATH}'. Loading from cache.")
-        
-    print("Loading model and tokenizer from local path...")
-    models['tokenizer'] = AutoTokenizer.from_pretrained(MODEL_CACHE_PATH)
-    models['model'] = AutoModelForQuestionAnswering.from_pretrained(MODEL_CACHE_PATH).to(DEVICE)
+    model_path = snapshot_download(repo_id=HF_MODEL_ID)
+    
+    print(f"Model downloaded to temporary path: {model_path}")
+    print("Loading model and tokenizer from temporary path...")
+    
+    models['tokenizer'] = AutoTokenizer.from_pretrained(model_path)
+    models['model'] = AutoModelForQuestionAnswering.from_pretrained(model_path).to(DEVICE)
     models['model'].eval()
+    
     print("Model loaded successfully into memory!")
     yield
     models.clear()
